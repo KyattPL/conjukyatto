@@ -143,7 +143,7 @@ export default function Home() {
   };
 
   useEffect(() => {
-    fetch('/data.json')
+    fetch('/conjukyatto/data.json')
       .then((response) => response.json())
       .then((rawData) => {
         const transformedData = transformVerbData(rawData);

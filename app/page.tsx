@@ -37,7 +37,7 @@ export default function Home() {
   const [currentMood, setCurrentMood] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch('/data.json')
+    fetch('/conjukyatto/data.json')
       .then((response) => response.json())
       .then((rawData) => {
         const transformedData = transformVerbData(rawData);

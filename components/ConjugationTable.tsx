@@ -64,11 +64,11 @@ const ConjugationTable = forwardRef<ConjugationTableHandles, ConjugationTablePro
       className="bg-white shadow-md rounded-lg p-8"
     >
       <h2 className="text-2xl font-bold mb-4">{verb.verb} - {mood} {tense}</h2>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="flex flex-col gap-4">
           {['1s', '2s', '3s'].map((person) => (
             <div key={person} className="flex items-center">
-              <span className="w-16 font-bold">{person}</span>
+              <span className="w-12 sm:w-16 font-bold">{person}</span>
               <Input
                 type="text"
                 value={answers[person] || ''}
@@ -81,7 +81,7 @@ const ConjugationTable = forwardRef<ConjugationTableHandles, ConjugationTablePro
         <div className="flex flex-col gap-4">
           {['1p', '2p', '3p'].map((person) => (
             <div key={person} className="flex items-center">
-              <span className="w-16 font-bold">{person}</span>
+              <span className="w-12 sm:w-16 font-bold">{person}</span>
               <Input
                 type="text"
                 value={answers[person] || ''}

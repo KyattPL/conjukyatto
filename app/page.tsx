@@ -131,11 +131,11 @@ export default function Home() {
   };
 
   return (
-    <div className="flex-grow bg-gray-100 flex flex-col items-center p-4">
-      <div className="w-full max-w-5xl p-8 bg-white shadow-md rounded-lg">
+    <div className="flex-grow bg-gray-100 flex flex-col items-center p-2 sm:p-4">
+      <div className="w-full max-w-5xl p-4 sm:p-8 bg-white shadow-md rounded-lg">
         <h1 className="text-4xl font-bold text-center mb-8">Spanish Verb Conjugation</h1>
 
-        <div className="flex items-center justify-center gap-2 mb-4">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mb-4">
           <span>Single Tense Mode</span>
           <Switch
             checked={isMultiTenseMode}
@@ -144,8 +144,8 @@ export default function Home() {
           <span>Multi-Tense Mode</span>
         </div>
 
-        <div className="flex flex-col md:flex-row gap-4 mb-8 justify-center">
-          <div className="flex items-center gap-2">
+        <div className="flex flex-col lg:flex-row gap-4 mb-8 justify-center">
+          <div className="flex flex-col sm:flex-row items-center gap-2">
             <Popover>
               <PopoverTrigger asChild>
                 <Button
@@ -186,7 +186,7 @@ export default function Home() {
             </Button>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row items-center gap-2">
             {!isMultiTenseMode && (
               <Popover>
                 <PopoverTrigger asChild>

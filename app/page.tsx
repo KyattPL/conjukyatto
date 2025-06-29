@@ -1,15 +1,9 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import ConjugationTable from '@/components/ConjugationTable';
+import React, { useState, useEffect, useRef } from 'react';
+import ConjugationTable, { ConjugationTableHandles } from '@/components/ConjugationTable';
 import { transformVerbData, Verb } from '@/lib/utils/dataTransformer';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -26,18 +20,21 @@ import {
 } from "@/components/ui/popover";
 import { ChevronsUpDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Switch } from "@/components/ui/switch";
 
 export default function Home() {
   const [verbs, setVerbs] = useState<Verb[]>([]);
   const [selectedVerb, setSelectedVerb] = useState<string | null>(null);
-  const [selectedTense, setSelectedTense] = useState<string | null>(null);
-  const [selectedMood, setSelectedMood] = useState<string | null>(null);
   const [currentVerb, setCurrentVerb] = useState<Verb | null>(null);
-  const [currentTense, setCurrentTense] = useState<string | null>(null);
-  const [currentMood, setCurrentMood] = useState<string | null>(null);
+  const [selectedTenseMoodCombinations, setSelectedTenseMoodCombinations] = useState<string[]>([]);
+  const [allTenseMoodCombinations, setAllTenseMoodCombinations] = useState<string[]>([]);
+  const [isMultiTenseMode, setIsMultiTenseMode] = useState(false);
+  const singleTableRef = useRef<ConjugationTableHandles>(null);
+  
+  const multiTableRefs = useRef<Map<string, React.RefObject<ConjugationTableHandles | null>>>(new Map());
 
   useEffect(() => {
-    fetch('/conjukyatto/data.json')
+    fetch('/data.json')
       .then((response) => response.json())
       .then((rawData) => {
         const transformedData = transformVerbData(rawData);
@@ -47,83 +44,53 @@ export default function Home() {
       .catch((error) => console.error('Error loading verbs:', error));
   }, []);
 
+  useEffect(() => {
+    if (verbs.length > 0) {
+      const combinations = new Set<string>();
+      verbs.forEach(verb => {
+        Object.entries(verb.tenses).forEach(([tense, moods]) => {
+          Object.keys(moods).forEach(mood => {
+            combinations.add(`${mood}|${tense}`);
+          });
+        });
+      });
+      setAllTenseMoodCombinations(Array.from(combinations).sort());
+    }
+  }, [verbs]);
+
   const handleRandomVerb = () => {
     if (verbs.length === 0) return;
     const randomVerb = verbs[Math.floor(Math.random() * verbs.length)];
     setSelectedVerb(randomVerb.verb);
     setCurrentVerb(randomVerb);
 
-    const availableTensesForVerb = Object.keys(randomVerb.tenses);
-    const newTense = selectedTense && availableTensesForVerb.includes(selectedTense) ? selectedTense : availableTensesForVerb[0];
-    setSelectedTense(newTense);
-    setCurrentTense(newTense);
-
-    const availableMoodsForTense = Object.keys(randomVerb.tenses[newTense]);
-    const newMood = selectedMood && availableMoodsForTense.includes(selectedMood) ? selectedMood : availableMoodsForTense[0];
-    setSelectedMood(newMood);
-    setCurrentMood(newMood);
-  };
-
-  const handleRandomTense = () => {
-    if (!currentVerb) {
-      handleRandomVerb(); // If no verb is selected, select a random verb first
-      return;
+    if (!isMultiTenseMode) {
+      const availableTensesForVerb = Object.keys(randomVerb.tenses);
+      const randomTense = availableTensesForVerb[Math.floor(Math.random() * availableTensesForVerb.length)];
+      const availableMoodsForTense = Object.keys(randomVerb.tenses[randomTense]);
+      const randomMood = availableMoodsForTense[Math.floor(Math.random() * availableMoodsForTense.length)];
+      setSelectedTenseMoodCombinations([`${randomMood}|${randomTense}`]);
+    } else {
+      // In multi-tense mode, we don't automatically select a single tense/mood
+      setSelectedTenseMoodCombinations([]);
     }
-    const availableTensesForVerb = Object.keys(currentVerb.tenses);
-    const randomTense = availableTensesForVerb[Math.floor(Math.random() * availableTensesForVerb.length)];
-    setSelectedTense(randomTense);
-    const availableMoodsForTense = Object.keys(currentVerb.tenses[randomTense]);
-    const randomMood = availableMoodsForTense[Math.floor(Math.random() * availableMoodsForTense.length)];
-    setSelectedMood(randomMood);
-    setCurrentTense(randomTense);
-    setCurrentMood(randomMood);
-  };
-
-  const handleRandomMood = () => {
-    if (!currentVerb || !currentTense) {
-      handleInitialRandomSelection(verbs);
-      return;
-    }
-    const availableMoodsForTense = Object.keys(currentVerb.tenses[currentTense]);
-    const randomMood = availableMoodsForTense[Math.floor(Math.random() * availableMoodsForTense.length)];
-    setSelectedMood(randomMood);
-    setCurrentMood(randomMood);
   };
 
   const handleVerbChange = (verbName: string) => {
     setSelectedVerb(verbName);
     const verbObj = verbs.find(v => v.verb === verbName);
     setCurrentVerb(verbObj || null);
-    if (verbObj) {
+    if (verbObj && !isMultiTenseMode) {
       const availableTensesForVerb = Object.keys(verbObj.tenses);
-      const newTense = selectedTense && availableTensesForVerb.includes(selectedTense) ? selectedTense : availableTensesForVerb[0];
-      setSelectedTense(newTense);
-      setCurrentTense(newTense);
-
+      const newTense = availableTensesForVerb[0];
       const availableMoodsForTense = Object.keys(verbObj.tenses[newTense]);
-      const newMood = selectedMood && availableMoodsForTense.includes(selectedMood) ? selectedMood : availableMoodsForTense[0];
-      setSelectedMood(newMood);
-      setCurrentMood(newMood);
-    } else {
-      setCurrentTense(null);
-      setCurrentMood(null);
+      const newMood = availableMoodsForTense[0];
+      setSelectedTenseMoodCombinations([`${newMood}|${newTense}`]);
+    } else if (verbObj && isMultiTenseMode) {
+      setSelectedTenseMoodCombinations([]);
+    } else if (!verbObj) {
+      setSelectedTenseMoodCombinations([]);
     }
-  };
-
-  const handleTenseChange = (tenseName: string) => {
-    setSelectedTense(tenseName);
-    setCurrentTense(tenseName);
-    if (currentVerb) {
-      const availableMoodsForTense = Object.keys(currentVerb.tenses[tenseName]);
-      const newMood = selectedMood && availableMoodsForTense.includes(selectedMood) ? selectedMood : availableMoodsForTense[0];
-      setSelectedMood(newMood);
-      setCurrentMood(newMood);
-    }
-  };
-
-  const handleMoodChange = (moodName: string) => {
-    setSelectedMood(moodName);
-    setCurrentMood(moodName);
   };
 
   const handleInitialRandomSelection = (allVerbs: Verb[]) => {
@@ -135,31 +102,47 @@ export default function Home() {
     const randomMood = availableMoodsForTense[Math.floor(Math.random() * availableMoodsForTense.length)];
 
     setSelectedVerb(randomVerb.verb);
-    setSelectedTense(randomTense);
-    setSelectedMood(randomMood);
     setCurrentVerb(randomVerb);
-    setCurrentTense(randomTense);
-    setCurrentMood(randomMood);
+    setSelectedTenseMoodCombinations([`${randomMood}|${randomTense}`]);
   };
 
-  useEffect(() => {
-    fetch('/conjukyatto/data.json')
-      .then((response) => response.json())
-      .then((rawData) => {
-        const transformedData = transformVerbData(rawData);
-        setVerbs(transformedData);
-        handleInitialRandomSelection(transformedData);
-      })
-      .catch((error) => console.error('Error loading verbs:', error));
-  }, []);
+  
 
-  const availableTenses = currentVerb ? Object.keys(currentVerb.tenses) : [];
-  const availableMoods = (currentVerb && currentTense) ? Object.keys(currentVerb.tenses[currentTense]) : [];
+  const handleMultiTenseModeChange = (checked: boolean) => {
+    setIsMultiTenseMode(checked);
+    if (!checked) {
+      // When switching back to single tense mode, reset multi-tense selections
+      
+      multiTableRefs.current.clear();
+      // And set a default single tense/mood if a verb is selected
+      if (currentVerb) {
+        const availableTensesForVerb = Object.keys(currentVerb.tenses);
+        const randomTense = availableTensesForVerb[0];
+        const availableMoodsForTense = Object.keys(currentVerb.tenses[randomTense]);
+        const randomMood = availableMoodsForTense[0];
+        setSelectedTenseMoodCombinations([`${randomMood}|${randomTense}`]);
+      } else {
+        setSelectedTenseMoodCombinations([]);
+      }
+    } else {
+      // When switching to multi-tense mode, clear single selection
+      setSelectedTenseMoodCombinations([]);
+    }
+  };
 
   return (
     <div className="flex-grow bg-gray-100 flex flex-col items-center p-4">
       <div className="w-full max-w-5xl p-8 bg-white shadow-md rounded-lg">
         <h1 className="text-4xl font-bold text-center mb-8">Spanish Verb Conjugation</h1>
+
+        <div className="flex items-center justify-center gap-2 mb-4">
+          <span>Single Tense Mode</span>
+          <Switch
+            checked={isMultiTenseMode}
+            onCheckedChange={handleMultiTenseModeChange}
+          />
+          <span>Multi-Tense Mode</span>
+        </div>
 
         <div className="flex flex-col md:flex-row gap-4 mb-8 justify-center">
           <div className="flex items-center gap-2">
@@ -204,45 +187,191 @@ export default function Home() {
           </div>
 
           <div className="flex items-center gap-2">
-            <Select onValueChange={handleTenseChange} value={selectedTense || ""}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select a tense" />
-              </SelectTrigger>
-              <SelectContent>
-                {availableTenses.map((t) => (
-                  <SelectItem key={t} value={t}>
-                    {t}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Button onClick={handleRandomTense} className="cursor-pointer">
-              Random Tense
-            </Button>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Select onValueChange={handleMoodChange} value={selectedMood || ""}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Select a mood" />
-              </SelectTrigger>
-              <SelectContent>
-                {availableMoods.map((m) => (
-                  <SelectItem key={m} value={m}>
-                    {m}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Button onClick={handleRandomMood} className="cursor-pointer">
-              Random Mood
+            {!isMultiTenseMode && (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    className="w-[200px] justify-between"
+                  >
+                    {selectedTenseMoodCombinations.length > 0
+                      ? selectedTenseMoodCombinations[0]
+                      : "Select tense/mood..."}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[200px] p-0">
+                  <Command>
+                    <CommandInput placeholder="Search tense/mood..." />
+                    <CommandList>
+                      <CommandEmpty>No tense/mood found.</CommandEmpty>
+                      <CommandGroup>
+                        {allTenseMoodCombinations.map((combination) => (
+                          <CommandItem
+                            key={combination}
+                            value={combination}
+                            onSelect={(currentValue) => {
+                              setSelectedTenseMoodCombinations([currentValue]);
+                            }}
+                          >
+                            {combination}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+            )}
+            {isMultiTenseMode && (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    role="combobox"
+                    className="w-[200px] justify-between"
+                  >
+                    {selectedTenseMoodCombinations.length > 0
+                      ? `${selectedTenseMoodCombinations.length} selected`
+                      : "Select tense/moods..."}
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-[200px] p-0">
+                  <Command>
+                    <CommandInput placeholder="Search tense/mood..." />
+                    <CommandList>
+                      <CommandEmpty>No tense/mood found.</CommandEmpty>
+                      <CommandGroup>
+                        {allTenseMoodCombinations.map((combination) => (
+                          <CommandItem
+                            key={combination}
+                            value={combination}
+                            onSelect={(currentValue) => {
+                              setSelectedTenseMoodCombinations(prev =>
+                                prev.includes(currentValue)
+                                  ? prev.filter(item => item !== currentValue)
+                                  : [...prev, currentValue]
+                              );
+                            }}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={selectedTenseMoodCombinations.includes(combination)}
+                              readOnly
+                              className="mr-2"
+                            />
+                            {combination}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+            )}
+            <Button onClick={() => {
+              if (currentVerb && allTenseMoodCombinations.length > 0) {
+                const randomCombination = allTenseMoodCombinations[Math.floor(Math.random() * allTenseMoodCombinations.length)];
+                if (isMultiTenseMode) {
+                  setSelectedTenseMoodCombinations(prev => [...prev, randomCombination]);
+                } else {
+                  setSelectedTenseMoodCombinations([randomCombination]);
+                }
+              }
+            }} className="cursor-pointer">
+              Random Tense/Mood
             </Button>
           </div>
         </div>
 
-        {currentVerb && currentTense && currentMood && (
-          <ConjugationTable verb={currentVerb} tense={currentTense} mood={currentMood} />
+        {isMultiTenseMode && currentVerb ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {selectedTenseMoodCombinations.map((combination) => {
+              const [mood, tense] = combination.split('|');
+              const key = `${currentVerb.verb}-${tense}-${mood}`;
+              if (!multiTableRefs.current.has(key)) {
+                multiTableRefs.current.set(key, React.createRef<ConjugationTableHandles | null>());
+              }
+              return (
+                <div key={key} className="relative">
+                  <ConjugationTable
+                    ref={multiTableRefs.current.get(key) as React.RefObject<ConjugationTableHandles>}
+                    verb={currentVerb}
+                    tense={tense}
+                    mood={mood}
+                  />
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    className="absolute top-2 right-2 cursor-pointer"
+                    onClick={() => setSelectedTenseMoodCombinations(prev => prev.filter(item => item !== combination))}
+                  >
+                    Remove
+                  </Button>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          currentVerb && selectedTenseMoodCombinations.length > 0 && (
+            <ConjugationTable
+              ref={singleTableRef}
+              verb={currentVerb}
+              tense={selectedTenseMoodCombinations[0].split('|')[1]}
+              mood={selectedTenseMoodCombinations[0].split('|')[0]}
+            />
+          )
         )}
+
+        <div className="flex justify-center gap-4 mt-8">
+          <Button onClick={() => {
+            if (isMultiTenseMode) {
+              selectedTenseMoodCombinations.forEach((combination) => {
+                if (currentVerb) {
+                  const [mood, tense] = combination.split('|');
+                  const key = `${currentVerb.verb}-${tense}-${mood}`;
+                  multiTableRefs.current.get(key)?.current?.clear();
+                }
+              });
+            } else {
+              singleTableRef.current?.clear();
+            }
+          }}>
+            Clear
+          </Button>
+          <Button onClick={() => {
+            if (isMultiTenseMode) {
+              selectedTenseMoodCombinations.forEach((combination) => {
+                if (currentVerb) {
+                  const [mood, tense] = combination.split('|');
+                  const key = `${currentVerb.verb}-${tense}-${mood}`;
+                  multiTableRefs.current.get(key)?.current?.check();
+                }
+              });
+            } else {
+              singleTableRef.current?.check();
+            }
+          }}>
+            Check
+          </Button>
+          <Button onClick={() => {
+            if (isMultiTenseMode) {
+              selectedTenseMoodCombinations.forEach((combination) => {
+                if (currentVerb) {
+                  const [mood, tense] = combination.split('|');
+                  const key = `${currentVerb.verb}-${tense}-${mood}`;
+                  multiTableRefs.current.get(key)?.current?.showAnswers();
+                }
+              });
+            } else {
+              singleTableRef.current?.showAnswers();
+            }
+          }}>
+            Show Answers
+          </Button>
+        </div>
       </div>
     </div>
   );

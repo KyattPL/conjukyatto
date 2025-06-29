@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useImperativeHandle, forwardRef } from 'react';
 import { motion } from 'framer-motion';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -20,7 +20,13 @@ interface ConjugationTableProps {
   mood: string;
 }
 
-const ConjugationTable: React.FC<ConjugationTableProps> = ({ verb, tense, mood }) => {
+export interface ConjugationTableHandles {
+  clear: () => void;
+  check: () => void;
+  showAnswers: () => void;
+}
+
+const ConjugationTable = forwardRef<ConjugationTableHandles, ConjugationTableProps>(({ verb, tense, mood }, ref) => {
   const [answers, setAnswers] = useState<{ [key: string]: string }>({});
   const [showAnswers, setShowAnswers] = useState(false);
 
@@ -33,20 +39,20 @@ const ConjugationTable: React.FC<ConjugationTableProps> = ({ verb, tense, mood }
     setAnswers({ ...answers, [person]: value });
   };
 
-  const handleClear = () => {
-    setAnswers({});
-    setShowAnswers(false);
-  };
-
-  const handleCheck = () => {
-    setShowAnswers(true);
-  };
-
-  const handleShow = () => {
-    const correctAnswers = verb.tenses[tense][mood];
-    setAnswers(correctAnswers);
-    setShowAnswers(true);
-  };
+  useImperativeHandle(ref, () => ({
+    clear: () => {
+      setAnswers({});
+      setShowAnswers(false);
+    },
+    check: () => {
+      setShowAnswers(true);
+    },
+    showAnswers: () => {
+      const correctAnswers = verb.tenses[tense][mood];
+      setAnswers(correctAnswers);
+      setShowAnswers(true);
+    },
+  }));
 
   const correctAnswers = verb.tenses[tense][mood];
 
@@ -59,42 +65,36 @@ const ConjugationTable: React.FC<ConjugationTableProps> = ({ verb, tense, mood }
     >
       <h2 className="text-2xl font-bold mb-4">{verb.verb} - {mood} {tense}</h2>
       <div className="grid grid-cols-2 gap-4">
-        {Object.keys(correctAnswers).map((person) => (
-          <div key={person} className="flex items-center">
-            <span className="w-16 font-bold">{person}</span>
-            <Input
-              type="text"
-              value={answers[person] || ''}
-              onChange={(e) => handleInputChange(person, e.target.value)}
-              className={`${showAnswers ? (answers[person] === correctAnswers[person] ? 'border-green-500' : 'border-red-500') : ''}`}
-            />
-          </div>
-        ))}
+        <div className="flex flex-col gap-4">
+          {['1s', '2s', '3s'].map((person) => (
+            <div key={person} className="flex items-center">
+              <span className="w-16 font-bold">{person}</span>
+              <Input
+                type="text"
+                value={answers[person] || ''}
+                onChange={(e) => handleInputChange(person, e.target.value)}
+                className={`${showAnswers ? (answers[person] === correctAnswers[person] ? 'border-green-500' : 'border-red-500') : ''}`}
+              />
+            </div>
+          ))}
+        </div>
+        <div className="flex flex-col gap-4">
+          {['1p', '2p', '3p'].map((person) => (
+            <div key={person} className="flex items-center">
+              <span className="w-16 font-bold">{person}</span>
+              <Input
+                type="text"
+                value={answers[person] || ''}
+                onChange={(e) => handleInputChange(person, e.target.value)}
+                className={`${showAnswers ? (answers[person] === correctAnswers[person] ? 'border-green-500' : 'border-red-500') : ''}`}
+              />
+            </div>
+          ))}
+        </div>
       </div>
-      <div className="text-center mt-8 flex justify-center gap-4">
-        <Button
-          onClick={handleClear}
-          variant="outline"
-          className="cursor-pointer"
-        >
-          Clear
-        </Button>
-        <Button
-          onClick={handleCheck}
-          className="cursor-pointer"
-        >
-          Check
-        </Button>
-        <Button
-          onClick={handleShow}
-          variant="secondary"
-          className="cursor-pointer"
-        >
-          Show Answers
-        </Button>
-      </div>
+      
     </motion.div>
   );
-};
+});
 
 export default ConjugationTable;

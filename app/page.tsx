@@ -193,7 +193,7 @@ export default function Home() {
                   <Button
                     variant="outline"
                     role="combobox"
-                    className="w-[200px] justify-between"
+                    className="justify-between"
                   >
                     {selectedTenseMoodCombinations.length > 0
                       ? selectedTenseMoodCombinations[0]
@@ -230,7 +230,7 @@ export default function Home() {
                   <Button
                     variant="outline"
                     role="combobox"
-                    className="w-[200px] justify-between"
+                    className="justify-between"
                   >
                     {selectedTenseMoodCombinations.length > 0
                       ? `${selectedTenseMoodCombinations.length} selected`

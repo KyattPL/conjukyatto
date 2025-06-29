@@ -34,7 +34,7 @@ export default function Home() {
   const multiTableRefs = useRef<Map<string, React.RefObject<ConjugationTableHandles | null>>>(new Map());
 
   useEffect(() => {
-    fetch('/data.json')
+    fetch('/conjukyatto/data.json')
       .then((response) => response.json())
       .then((rawData) => {
         const transformedData = transformVerbData(rawData);

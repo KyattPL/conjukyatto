@@ -63,17 +63,6 @@ export default function Home() {
     const randomVerb = verbs[Math.floor(Math.random() * verbs.length)];
     setSelectedVerb(randomVerb.verb);
     setCurrentVerb(randomVerb);
-
-    if (!isMultiTenseMode) {
-      const availableTensesForVerb = Object.keys(randomVerb.tenses);
-      const randomTense = availableTensesForVerb[Math.floor(Math.random() * availableTensesForVerb.length)];
-      const availableMoodsForTense = Object.keys(randomVerb.tenses[randomTense]);
-      const randomMood = availableMoodsForTense[Math.floor(Math.random() * availableMoodsForTense.length)];
-      setSelectedTenseMoodCombinations([`${randomMood}|${randomTense}`]);
-    } else {
-      // In multi-tense mode, we don't automatically select a single tense/mood
-      setSelectedTenseMoodCombinations([]);
-    }
   };
 
   const handleVerbChange = (verbName: string) => {
@@ -132,7 +121,7 @@ export default function Home() {
 
   return (
     <div className="flex-grow bg-gray-100 flex flex-col items-center p-2 sm:p-4">
-      <div className="w-full max-w-5xl p-4 sm:p-8 bg-white shadow-md rounded-lg">
+      <div className={`w-full p-4 sm:p-8 bg-white shadow-md rounded-lg ${isMultiTenseMode ? 'max-w-[1400px]' : 'max-w-5xl'}`}>
         <h1 className="text-4xl font-bold text-center mb-8">Spanish Verb Conjugation</h1>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mb-4">
@@ -326,7 +315,7 @@ export default function Home() {
         )}
 
         <div className="flex justify-center gap-4 mt-8">
-          <Button onClick={() => {
+          <Button className='cursor-pointer' onClick={() => {
             if (isMultiTenseMode) {
               selectedTenseMoodCombinations.forEach((combination) => {
                 if (currentVerb) {
@@ -341,7 +330,7 @@ export default function Home() {
           }}>
             Clear
           </Button>
-          <Button onClick={() => {
+          <Button className='cursor-pointer' onClick={() => {
             if (isMultiTenseMode) {
               selectedTenseMoodCombinations.forEach((combination) => {
                 if (currentVerb) {
@@ -356,7 +345,7 @@ export default function Home() {
           }}>
             Check
           </Button>
-          <Button onClick={() => {
+          <Button className='cursor-pointer' onClick={() => {
             if (isMultiTenseMode) {
               selectedTenseMoodCombinations.forEach((combination) => {
                 if (currentVerb) {

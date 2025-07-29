@@ -281,7 +281,7 @@ const ConjugationRow = ({ pronoun, ending }: { pronoun: string; ending: string }
 );
 
 const IrregularInfoCard = ({ title, children, className = "" }: { title: string; children: React.ReactNode; className?: string }) => (
-  <div className={`bg-red-500/10 border-2 border-red-400 rounded-lg p-4 h-full ${className}`}>
+  <div className={`bg-red-500/10 border-2 border-red-400 rounded-lg p-4 ${className}`}>
     <h4 className="font-bold text-red-600 mb-2">{title}</h4>
     <div className="space-y-3">{children}</div>
   </div>

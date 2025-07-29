@@ -33,13 +33,13 @@ export default function RootLayout({
           <h1 className="text-xl font-bold">Spanish Conjugation</h1>
           <nav>
             <Link href="/">
-              <Button variant="ghost">Conjugate</Button>
+              <Button variant="ghost" className="cursor-pointer">Conjugate</Button>
             </Link>
             <Link href="/cheat-sheet">
-              <Button variant="ghost">Cheat sheet</Button>
+              <Button variant="ghost" className="cursor-pointer">Cheat sheet</Button>
             </Link>
             <Link href="/irregulars">
-              <Button variant="ghost">Irregular verbs</Button>
+              <Button variant="ghost" className="cursor-pointer">Irregular verbs</Button>
             </Link>
           </nav>
         </header>

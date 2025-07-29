@@ -1,0 +1,170 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    margin: 0;
+    padding: 20px;
+    color: #333;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.tense-section {
+    margin-bottom: 40px;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.tense-section:hover {
+    transform: translateY(-2px);
+}
+
+.present { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+.preterite { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
+.imperfect { background: linear-gradient(135deg, #d299c2 0%, #fef9d7 100%); }
+.subjunctive { background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%); }
+.progressive { background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%); }
+.commands { background: linear-gradient(135deg, #ffe8a2 0%, #fff6f4 100%); }
+
+.tense-title {
+    font-size: 1.8em;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+.conjugation-table {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.verb-type {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 15px;
+    border-radius: 10px;
+    border: 2px solid #3498db;
+    transition: all 0.3s ease;
+}
+
+.verb-type:hover {
+    background: rgba(255, 255, 255, 0.95);
+    transform: scale(1.02);
+}
+
+.verb-type h3 {
+    margin: 0 0 10px 0;
+    color: #2c3e50;
+    font-size: 1.2em;
+    text-align: center;
+}
+
+.conjugation-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px 0;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background: rgba(52, 152, 219, 0.1);
+}
+
+.pronoun {
+    font-weight: bold;
+    color: #2c3e50;
+    min-width: 80px;
+}
+
+.ending {
+    font-family: 'Courier New', monospace;
+    background: #3498db;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+}
+
+.irregular-info {
+    background: rgba(231, 76, 60, 0.1);
+    border: 2px solid #e74c3c;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 15px;
+}
+
+.irregular-title {
+    font-weight: bold;
+    color: #e74c3c;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.irregular-list {
+    margin: 8px 0;
+}
+
+.irregular-item {
+    background: rgba(231, 76, 60, 0.1);
+    padding: 5px 10px;
+    margin: 3px 0;
+    border-radius: 5px;
+    border-left: 4px solid #e74c3c;
+}
+
+.note {
+    background: rgba(241, 196, 15, 0.2);
+    border: 2px solid #f1c40f;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 15px;
+}
+
+.note-title {
+    font-weight: bold;
+    color: #f39c12;
+    margin-bottom: 10px;
+}
+
+.example {
+    font-style: italic;
+    color: #3f4646;
+    margin: 5px 0;
+}
+
+@media (max-width: 768px) {
+    .conjugation-table {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .container {
+        padding: 20px;
+    }
+    
+    h1 {
+        font-size: 2em;
+    }
+}
+
+@media (max-width: 480px) {
+    .conjugation-table {
+        grid-template-columns: 1fr;
+    }
+}

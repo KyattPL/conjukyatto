@@ -35,6 +35,12 @@ export default function RootLayout({
             <Link href="/">
               <Button variant="ghost">Conjugate</Button>
             </Link>
+            <Link href="/cheat-sheet">
+              <Button variant="ghost">Cheat sheet</Button>
+            </Link>
+            <Link href="/irregulars">
+              <Button variant="ghost">Irregular verbs</Button>
+            </Link>
           </nav>
         </header>
         {children}

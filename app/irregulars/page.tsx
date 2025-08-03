@@ -144,6 +144,32 @@ const IrregularsPage = () => {
             </VerbCard>
           </div>
         </TenseSection>
+        {/* Irregular Past Participles */}
+        <TenseSection
+          title="Irregular Past Participles"
+          gradient="from-[#e0c3fc] to-[#8ec5fc]"
+        >
+          <NoteCard title="Used for Perfect Tenses & Adjectives" className="mb-6">
+            <p>These verbs have irregular past participles. These forms are used with the verb <strong>haber</strong> to create the perfect tenses (e.g., Present Perfect: <em>he dicho</em>) and can also be used as adjectives (e.g., <em>la puerta está abierta</em>).</p>
+          </NoteCard>
+          <VerbCard title="The Irregulars List">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-4 gap-y-2">
+              <p><strong>abrir</strong> → abierto</p>
+              <p><strong>cubrir</strong> → cubierto</p>
+              <p><strong>decir</strong> → dicho</p>
+              <p><strong>escribir</strong> → escrito</p>
+              <p><strong>freír</strong> → frito</p>
+              <p><strong>hacer</strong> → hecho</p>
+              <p><strong>morir</strong> → muerto</p>
+              <p><strong>poner</strong> → puesto</p>
+              <p><strong>pudrir</strong> → podrido</p>
+              <p><strong>romper</strong> → roto</p>
+              <p><strong>ver</strong> → visto</p>
+              <p><strong>volver</strong> → vuelto</p>
+            </div>
+            <Example>Verbs derived from these also follow the pattern: <strong>describir → descrito</strong>, <strong>componer → compuesto</strong>.</Example>
+          </VerbCard>
+        </TenseSection>
       </div>
     </main>
   );

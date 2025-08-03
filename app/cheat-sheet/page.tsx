@@ -253,6 +253,43 @@ const CheatSheetPage = () => {
             </ul>
           </NoteCard>
         </TenseSection>
+        {/* Perfect Tenses */}
+        <TenseSection
+          title="Perfect Tenses (Present & Past)"
+          gradient="from-[#e0c3fc] to-[#8ec5fc]"
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+            <VerbTypeCard title="Formation: Haber + Past Participle">
+              <p className="text-sm mb-3 text-center">
+                Formed by conjugating <strong>haber</strong> (present or imperfect) and adding a past participle.
+              </p>
+              <h4 className="font-bold text-gray-700 mb-1">Regular Participles</h4>
+              <ConjugationRow pronoun="-AR Verbs" ending="-ado" />
+              <Example>hablar → hablado</Example>
+              <ConjugationRow pronoun="-ER/-IR Verbs" ending="-ido" />
+              <Example>comer → comido</Example>
+              <h4 className="font-bold text-gray-700 mt-3 mb-1">Example Tenses</h4>
+              <p className="text-sm"><strong>Present Perfect:</strong> he, has, ha... + hablado</p>
+              <p className="text-sm"><strong>Past Perfect:</strong> había, habías... + comido</p>
+            </VerbTypeCard>
+            <IrregularInfoCard title="Irregular Past Participles">
+              <p className="text-sm text-gray-700 italic grid grid-cols-2 gap-x-4 gap-y-1">
+                <span>abrir → <strong>abierto</strong></span>
+                <span>cubrir → <strong>cubierto</strong></span>
+                <span>decir → <strong>dicho</strong></span>
+                <span>escribir → <strong>escrito</strong></span>
+                <span>freír → <strong>frito</strong></span>
+                <span>hacer → <strong>hecho</strong></span>
+                <span>morir → <strong>muerto</strong></span>
+                <span>poner → <strong>puesto</strong></span>
+                <span>pudrir → <strong>podrido</strong></span>
+                <span>romper → <strong>roto</strong></span>
+                <span>ver → <strong>visto</strong></span>
+                <span>volver → <strong>vuelto</strong></span>
+              </p>
+            </IrregularInfoCard>
+          </div>
+        </TenseSection>
       </div>
     </main>
   );

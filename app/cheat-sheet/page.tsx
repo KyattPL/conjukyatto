@@ -272,6 +272,20 @@ const CheatSheetPage = () => {
               <p className="text-sm"><strong>Present Perfect:</strong> he, has, ha... + hablado</p>
               <p className="text-sm"><strong>Past Perfect:</strong> había, habías... + comido</p>
             </VerbTypeCard>
+            <NoteCard title="Past Participle: Other Uses" className="mt-4">
+            <ul className="space-y-4 list-disc list-inside">
+              <li>
+                <strong>As an Adjective (often with *estar*):</strong> Describes the <strong>result</strong> of an action or a state. It must agree in gender and number with the noun it modifies.
+                <Example>La tienda <strong>está cerrada</strong>. (The store is closed.)</Example>
+                <Example>Los libros <strong>están escritos</strong> en español. (The books are written in Spanish.)</Example>
+              </li>
+              <li>
+                <strong>Passive Voice (with *ser*):</strong> Describes the <strong>action</strong> itself, focusing on the recipient. The past participle agrees with the subject. The active voice is often preferred in speech.
+                <Example>El libro <strong>fue escrito</strong> por Cervantes. (The book was written by Cervantes.)</Example>
+                <Example>Las casas <strong>fueron construidas</strong> por los trabajadores. (The houses were built by the workers.)</Example>
+              </li>
+            </ul>
+            </NoteCard>
             <IrregularInfoCard title="Irregular Past Participles">
               <p className="text-sm text-gray-700 italic grid grid-cols-2 gap-x-4 gap-y-1">
                 <span>abrir → <strong>abierto</strong></span>

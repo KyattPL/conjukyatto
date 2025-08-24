@@ -55,6 +55,9 @@ const CheatSheetPage = () => {
               <IrregularItem title="Completely irregular:">
                 ser, estar, ir, haber
               </IrregularItem>
+              <IrregularItem title="Where are irregularities">
+                irregularities only in 1s, 2s, 3s, 3p
+              </IrregularItem>
             </IrregularInfoCard>
           </div>
         </TenseSection>
@@ -93,6 +96,9 @@ const CheatSheetPage = () => {
                 <Example>
                   dormir → durmió/durmieron, pedir → pidió/pidieron
                 </Example>
+              </IrregularItem>
+              <IrregularItem title="Where are irregularities">
+                  only in 3s and 3p for -IR verbs
               </IrregularItem>
             </IrregularInfoCard>
           </div>

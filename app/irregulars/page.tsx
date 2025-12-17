@@ -115,6 +115,49 @@ const IrregularsPage = () => {
             </div>
           </TenseCard>
 
+          {/* Future & Conditional */}
+          <TenseCard
+            title="Future & Conditional Stems"
+            color="cyan"
+            patterns={[
+              "These two tenses share the EXACT same irregular stems.",
+              "Endings are added to these stems instead of the infinitive.",
+              "There are three main patterns of irregularity."
+            ]}
+          >
+            <div className="space-y-3">
+              <div className="bg-cyan-50 p-2 rounded border border-cyan-100">
+                <h4 className="font-bold text-cyan-800 text-sm mb-1">1. Drop the 'E'</h4>
+                <div className="grid grid-cols-2 gap-x-2 text-sm">
+                  <span>Poder → <strong>podr-</strong></span>
+                  <span>Querer → <strong>querr-</strong></span>
+                  <span>Saber → <strong>sabr-</strong></span>
+                  <span>Haber → <strong>habr-</strong></span>
+                  <span>Caber → <strong>cabr-</strong></span>
+                </div>
+              </div>
+
+              <div className="bg-cyan-50 p-2 rounded border border-cyan-100">
+                <h4 className="font-bold text-cyan-800 text-sm mb-1">2. Swap vowel for 'D'</h4>
+                <div className="grid grid-cols-2 gap-x-2 text-sm">
+                  <span>Tener → <strong>tendr-</strong></span>
+                  <span>Poner → <strong>pondr-</strong></span>
+                  <span>Salir → <strong>saldr-</strong></span>
+                  <span>Venir → <strong>vendr-</strong></span>
+                  <span>Valer → <strong>valdr-</strong></span>
+                </div>
+              </div>
+
+              <div className="bg-cyan-50 p-2 rounded border border-cyan-100">
+                <h4 className="font-bold text-cyan-800 text-sm mb-1">3. Shorten the Stem</h4>
+                <div className="grid grid-cols-2 gap-x-2 text-sm">
+                  <span>Hacer → <strong>har-</strong></span>
+                  <span>Decir → <strong>dir-</strong></span>
+                </div>
+              </div>
+            </div>
+          </TenseCard>
+
           {/* Subjunctive */}
           <TenseCard
             title="Present Subjunctive"
@@ -286,6 +329,9 @@ const TenseCard = ({
     orange: { border: "border-orange-200", bg: "bg-orange-50", text: "text-orange-800", badge: "bg-orange-100 text-orange-700" },
     blue: { border: "border-blue-200", bg: "bg-blue-50", text: "text-blue-800", badge: "bg-blue-100 text-blue-700" },
     rose: { border: "border-rose-200", bg: "bg-rose-50", text: "text-rose-800", badge: "bg-rose-100 text-rose-700" },
+    // Added for Future/Conditional
+    cyan: { border: "border-cyan-200", bg: "bg-cyan-50", text: "text-cyan-800", badge: "bg-cyan-100 text-cyan-700" },
+    fuchsia: { border: "border-fuchsia-200", bg: "bg-fuchsia-50", text: "text-fuchsia-800", badge: "bg-fuchsia-100 text-fuchsia-700" },
   };
 
   const theme = colorMap[color] || colorMap.indigo;

@@ -103,6 +103,66 @@ const CheatSheetPage = () => {
             </NoteBox>
           </TenseCard>
 
+          {/* Future */}
+          <TenseCard
+            title="Future Indicative"
+            color="cyan"
+            usage={[
+              "Actions that will happen (I will go).",
+              "Solemn commands (You shall not pass).",
+              "Probability/Wonder in the present (It must be 5 PM / ¿Qué hora será?)."
+            ]}
+          >
+            <div className="text-center mb-3">
+              <span className="font-bold text-lg text-cyan-700">Infinitive + Ending</span>
+            </div>
+            <div className="mb-4">
+              <CompactConjugationTable title="All Verbs (-AR/-ER/-IR)" endings={["é", "ás", "á", "emos", "éis", "án"]} />
+            </div>
+            <IrregularBox>
+              <p className="mb-1"><strong>Irregular Stems:</strong></p>
+              <p className="text-xs italic mb-2">Add endings to these stems instead of infinitive.</p>
+              <div className="grid grid-cols-2 gap-x-2 text-xs">
+                <span>Hacer → har-</span>
+                <span>Decir → dir-</span>
+                <span>Tener → tendr-</span>
+                <span>Poner → pondr-</span>
+                <span>Salir → saldr-</span>
+                <span>Venir → vendr-</span>
+                <span>Poder → podr-</span>
+                <span>Saber → sabr-</span>
+                <span>Querer → querr-</span>
+                <span>Haber → habr-</span>
+              </div>
+            </IrregularBox>
+          </TenseCard>
+
+          {/* Conditional */}
+          <TenseCard
+            title="Conditional Indicative"
+            color="fuchsia"
+            usage={[
+              "Hypothetical actions (I would go).",
+              "Politeness (Could you help me?).",
+              "Probability/Wonder in the past (It must have been 5 PM / ¿Qué hora sería?)."
+            ]}
+          >
+            <div className="text-center mb-3">
+              <span className="font-bold text-lg text-fuchsia-700">Infinitive + Ending</span>
+            </div>
+            <div className="mb-4">
+              <CompactConjugationTable title="All Verbs (-AR/-ER/-IR)" endings={["ía", "ías", "ía", "íamos", "íais", "ían"]} />
+            </div>
+            <NoteBox>
+              <p className="font-bold text-sm">Same Irregulars as Future!</p>
+              <p className="text-xs mt-1">
+                Use the same stems (har-, tendr-, dir-, etc.) but add the conditional endings.
+                <br/>
+                <em>Ex: haría, tendría, diría.</em>
+              </p>
+            </NoteBox>
+          </TenseCard>
+
           {/* Present Subjunctive */}
           <TenseCard
             title="Present Subjunctive"
@@ -265,6 +325,9 @@ const TenseCard = ({
     orange: { border: "border-orange-200", bg: "bg-orange-50", text: "text-orange-800", badge: "bg-orange-100 text-orange-700" },
     blue: { border: "border-blue-200", bg: "bg-blue-50", text: "text-blue-800", badge: "bg-blue-100 text-blue-700" },
     rose: { border: "border-rose-200", bg: "bg-rose-50", text: "text-rose-800", badge: "bg-rose-100 text-rose-700" },
+    // Added for Future/Conditional
+    cyan: { border: "border-cyan-200", bg: "bg-cyan-50", text: "text-cyan-800", badge: "bg-cyan-100 text-cyan-700" },
+    fuchsia: { border: "border-fuchsia-200", bg: "bg-fuchsia-50", text: "text-fuchsia-800", badge: "bg-fuchsia-100 text-fuchsia-700" },
   };
 
   const theme = colorMap[color] || colorMap.indigo;

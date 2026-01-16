@@ -41,6 +41,9 @@ export default function RootLayout({
             <Link href="/irregulars">
               <Button variant="ghost" className="cursor-pointer">Irregular verbs</Button>
             </Link>
+            <Link href="/irr-practice">
+              <Button variant="ghost" className="cursor-pointer">Irr. practice</Button>
+            </Link>
           </nav>
         </header>
         {children}

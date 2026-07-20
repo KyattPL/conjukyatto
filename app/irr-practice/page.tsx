@@ -4,6 +4,7 @@
 
 import { useState } from "react";
 import type { Metadata } from "next";
+import { irregularAnswers } from "./answers";
 
 const verbs = {
   "Present Indicative": [
@@ -55,6 +56,7 @@ const QuizPage = () => {
   const [currentTense, setCurrentTense] = useState<string>("Click 'Next Verb' to start");
   const [currentVerb, setCurrentVerb] = useState<string>("¡Vamos!");
   const [isInitial, setIsInitial] = useState(true);
+  const [showAnswer, setShowAnswer] = useState(false);
 
   const getRandomVerb = () => {
     const tenses = Object.keys(verbs);
@@ -65,11 +67,14 @@ const QuizPage = () => {
     setCurrentTense(randomTense);
     setCurrentVerb(randomVerb);
     setIsInitial(false);
+    setShowAnswer(false);
   };
 
   const theme = isInitial 
     ? { border: "border-slate-300", bg: "bg-slate-50", text: "text-slate-900", badgeBg: "bg-slate-100", badgeText: "text-slate-700" }
     : tenseColors[currentTense] || tenseColors["Present Indicative"];
+
+  const answer = !isInitial ? irregularAnswers[currentTense]?.[currentVerb] : null;
 
   return (
     <main className="min-h-screen bg-slate-50 p-4 md:p-8 font-sans text-slate-800">
@@ -94,15 +99,77 @@ const QuizPage = () => {
               {currentVerb}
             </div>
           </div>
+
+          {/* Answer Section */}
+          {showAnswer && !isInitial && answer && (
+            <div className={`p-6 border-t-2 ${theme.border} bg-slate-50 transition-colors duration-300`}>
+              {typeof answer === "string" ? (
+                // Single form (e.g. Past Participle or Affirmative Command)
+                <div className="text-center py-4">
+                  <span className="text-xs uppercase tracking-wider text-slate-400 font-extrabold block mb-1">
+                    Correct Form
+                  </span>
+                  <span className={`text-4xl font-extrabold ${theme.text}`}>
+                    {answer}
+                  </span>
+                </div>
+              ) : (
+                // 6-form conjugation table
+                <div className="max-w-md mx-auto">
+                  <span className="text-xs uppercase tracking-wider text-slate-400 font-extrabold block text-center mb-4">
+                    Conjugation
+                  </span>
+                  <div className="grid grid-cols-2 gap-3">
+                    {[
+                      { pronoun: "yo", key: "1s" },
+                      { pronoun: "nosotros", key: "1p" },
+                      { pronoun: "tú", key: "2s" },
+                      { pronoun: "vosotros", key: "2p" },
+                      { pronoun: "él/ella/ud", key: "3s" },
+                      { pronoun: "ellos/ellas/uds", key: "3p" },
+                    ].map(({ pronoun, key }) => (
+                      <div
+                        key={key}
+                        className={`flex justify-between items-center p-3 rounded-lg border ${theme.border} bg-white shadow-sm`}
+                      >
+                        <span className="text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                          {pronoun}
+                        </span>
+                        <span className={`font-bold ${theme.text} text-base md:text-lg`}>
+                          {answer[key as keyof typeof answer] || "—"}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
-        {/* Next Button */}
-        <button
-          onClick={getRandomVerb}
-          className="w-full bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white font-bold text-xl py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 active:translate-y-0"
-        >
-          Next Verb
-        </button>
+        {/* Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 mb-6">
+          {!isInitial && (
+            <button
+              onClick={() => setShowAnswer(!showAnswer)}
+              className={`flex-1 font-bold text-xl py-4 px-8 rounded-xl shadow-lg border-2 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer ${
+                showAnswer
+                  ? "bg-white border-slate-300 hover:bg-slate-50 text-slate-700"
+                  : "bg-slate-800 hover:bg-slate-900 border-transparent text-white"
+              }`}
+            >
+              {showAnswer ? "Hide Answer" : "Show Answer"}
+            </button>
+          )}
+          <button
+            onClick={getRandomVerb}
+            className={`${
+              isInitial ? "w-full" : "flex-1"
+            } bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700 text-white font-bold text-xl py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200 active:translate-y-0 cursor-pointer`}
+          >
+            {isInitial ? "Start Practice" : "Next Verb"}
+          </button>
+        </div>
 
         {/* Stats or Info Section */}
         <div className="mt-8 bg-white rounded-xl shadow-sm border border-slate-200 p-6">
